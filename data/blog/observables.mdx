@@ -1,0 +1,161 @@
+---
+title: Observables
+date: '2024-07-28'
+tags: ['Observables', 'RxJS', 'Angular', 'JavaScript']
+draft: false
+summary: Observables are not like EventEmitters nor are they like Promises for multiple values. Observables may act like EventEmitters in some cases, namely when they are multicasted using RxJS Subjects, but usually they don't act like EventEmitters.
+---
+
+Hello Developers, today is Sunday, Jul 28th, 2024 & we are learning new topic. **Happy Learning😃**
+
+- [What is an Observable?](#what-is-an-observable)
+- [Where do we use Observables?](#where-do-we-use-observables)
+- [How to use Observable?](#how-to-use-observable)
+
+## What is an Observable?
+
+In the context of programming and software development, particularly in reactive programming and frameworks like ReactiveX (RxJS for JavaScript), an "observable" is a data type that represents a stream of data or events. Observables can be used to handle asynchronous operations and event-driven programming more effectively.
+
+> RxJS is a library for reactive programming using Observables, to make it easier to compose asynchronous or callback-based code.
+
+Here are some key characteristics of observables:
+
+1. **Streams of Data or Events**: Observables can emit multiple values over time, which can be anything from simple data types like integers or strings to complex objects. These values can be emitted synchronously or asynchronously.
+
+2. **Subscription**: To receive the emitted values, you need to subscribe to the observable. When you subscribe, you provide callbacks (also known as observers) to handle the data, handle errors, and handle completion notifications.
+
+3. **Operators**: Observables can be transformed, combined, and manipulated using a wide range of operators. These operators allow you to compose complex data flows in a declarative manner.
+
+4. **Lazy Execution**: Observables are lazy, meaning they do not start emitting values until they are subscribed to. This is in contrast to promises, which start executing immediately when they are created.
+
+5. **Cancellation**: Observables provide a way to cancel the subscription, stopping the emission of values and cleaning up resources.
+
+## Where do we use Observables?
+
+Observables are particularly useful in scenarios such as:
+
+- Handling User Interactions such as:
+
+  - Click events
+  - Form inputs
+  - Drag-and-drop actions
+
+- Managing asynchronous operations like HTTP requests
+- Observables are ideal for representing data streams, such as:
+  - Sensor data in IoT applications
+  - Real-time location data
+  - Financial market data
+- Building complex data processing scenarios such as:
+  - Combining multiple data sources
+  - Throttling or debouncing user inputs
+  - Managing timeout scenarios
+- Implementing reactive programming patterns in applications
+
+## How to use Observable?
+
+I can not implement all scenarios here. I am only showing how to use Observables in Angular and JavaScript.
+
+### Example: Using Observables in Angular
+
+Here's a simple example of how observables can be used in an Angular application to handle HTTP requests and user interactions.
+
+#### Step 1: Set Up Angular Service with HttpClient
+
+Install Angular's HttpClient module:
+
+```bash
+ng add @angular/common/http
+```
+
+Create a service to fetch data:
+
+```typescript
+// src/app/data.service.ts
+import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { Observable } from 'rxjs'
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DataService {
+  constructor(private http: HttpClient) {}
+
+  getData(): Observable<any> {
+    return this.http.get('https://api.example.com/data')
+  }
+}
+```
+
+#### Step 2: Subscribe to Observable in Component
+
+Use the service in a component:
+
+```typescript
+// src/app/data.component.ts
+import { Component, OnInit } from '@angular/core'
+import { DataService } from './data.service'
+
+@Component({
+  selector: 'app-data',
+  template: `
+    <div *ngIf="data">
+      <pre>{{ data | json }}</pre>
+    </div>
+  `,
+})
+export class DataComponent implements OnInit {
+  data: any
+
+  constructor(private dataService: DataService) {}
+
+  ngOnInit(): void {
+    this.dataService.getData().subscribe((response) => {
+      this.data = response
+    })
+  }
+}
+```
+
+### Example: Using Observables in JavaScript
+
+Here's a simple example of creating and subscribing to an observable using RxJS:
+
+```javascript
+const { Observable } = require('rxjs')
+
+// Create an observable that emits a sequence of numbers
+const observable = new Observable((subscriber) => {
+  subscriber.next(1)
+  subscriber.next(2)
+  subscriber.next(3)
+  subscriber.complete()
+})
+
+// Subscribe to the observable
+observable.subscribe({
+  next(x) {
+    console.log('Got value ' + x)
+  },
+  error(err) {
+    console.error('Something went wrong: ' + err)
+  },
+  complete() {
+    console.log('Done')
+  },
+})
+```
+
+In this example:
+
+- The `Observable` constructor is used to create a new observable.
+- The observable emits the values 1, 2, and 3, and then completes.
+- The `subscribe` method is called to receive these values, handle potential errors, and handle the completion of the observable.
+
+### Summary
+
+Observables are a versatile and powerful tool for managing asynchronous data streams and events.
+
+They are widely used in modern web development, particularly in frameworks like Angular, to handle everything from user interactions and HTTP requests to real-time data and state management.
+
+By understanding and leveraging observables, you can build more responsive, maintainable, and scalable applications.
